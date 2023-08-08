@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  #game {
+    display: grid;
+    grid-template-columns: repeat(10, 40px);
+    grid-gap: 2px;
+  }
+  .cell {
+    width: 40px;
+    height: 40px;
+    background-color: lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+  }
+</style>
+<title>Pop the Bubbles!</title>
+</head>
+<body>
+<div id="game"></div>
+<p>Score: <span id="score">0</span></p>
+<p>Best Score: <span id="bestScore">0</span></p>
+<p>Time: <span id="timer">0</span> seconds</p>
+<script>
+  const gameContainer = document.getElementById("game");
+  const scoreDisplay = document.getElementById("score");
+  const bestScoreDisplay = document.getElementById("bestScore");
+  const timerDisplay = document.getElementById("timer");
+  
+  let score = 0;
+  let bestScore = localStorage.getItem("bestScore") || 0;
+  let startTime;
+  let timerInterval;
+
+  function createCell(index) {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.index = index;
+    cell.textContent = "Bulle";
+    cell.addEventListener("click", () => popBubble(cell));
+    return cell;
+  }
+
+  function popBubble(cell) {
+    if (cell.textContent === "Bulle") {
+      cell.textContent = "POP";
+      score++;
+      scoreDisplay.textContent = score;
+      if (score === 100) {
+        clearInterval(timerInterval);
+        if (score > bestScore) {
+          bestScore = score;
+          localStorage.setItem("bestScore", bestScore);
+          bestScoreDisplay.textContent = bestScore;
+        }
+      }
+    }
+  }
+
+  function startTimer() {
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000);
+  }
+
+  function updateTimer() {
+    const currentTime = Math.floor((Date.now() - startTime) / 1000);
+    timerDisplay.textContent = currentTime;
+  }
+
+  function initializeGame() {
+    score = 0;
+    scoreDisplay.textContent = score;
+    timerDisplay.textContent = "0";
+    bestScoreDisplay.textContent = bestScore;
+    gameContainer.innerHTML = "";
+    for (let i = 0; i < 100; i++) {
+      gameContainer.appendChild(createCell(i));
+    }
+    startTimer();
+  }
+
+  initializeGame();
+</script>
+</body>
+</html>
