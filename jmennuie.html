@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>En attendantune réponse</title>
+  <title>En attendant une réponsedes modos, jouons ! (et n'oublie pas de nous communiquer ton score 😀)</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    #game-container {
+      text-align: center;
+      padding: 20px;
+      border: 2px solid #333;
+      background-color: #f5f5f5;
+    }
+    #btnClick {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
 
-<h1>J’m’ennuie</h1>
+<div id="game-container">
+  <h1>Mon Jeu Simple Centré</h1>
 
-<p>Points: <span id="points">0</span></p>
+  <p>Points: <span id="points">0</span></p>
 
-<button id="btnClick">Clique pour gagner des points</button>
+  <button id="btnClick">Clique pour gagner des points</button>
+</div>
 
 <script>
-  // Obtenez une référence au bouton et à l'élément de points
   var btnClick = document.getElementById('btnClick');
   var pointsDisplay = document.getElementById('points');
-
-  // Initialisez le compteur de points
   var points = 0;
 
-  // Ajoutez un écouteur d'événements pour le clic sur le bouton
   btnClick.addEventListener('click', function() {
-    // Augmentez les points à chaque clic
     points++;
-    // Mettez à jour l'affichage des points
     pointsDisplay.textContent = points;
   });
 </script>
