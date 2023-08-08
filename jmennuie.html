@@ -1,48 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <title>En attendant une réponse des modos, jouons ! (et n'oublie pas de nous communiquer ton score 😀)</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    #game-container {
-      text-align: center;
-      padding: 20px;
-      border: 2px solid #333;
-      background-color: #f5f5f5;
-    }
-    #btnClick {
-      margin-top: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        #game-container {
+            text-align: center;
+        }
+        .cell {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #000;
+            margin: -1px 0 0 -1px;
+            line-height: 40px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+    <title>En attendant une réponse des modos, jouons !</title>
 </head>
 <body>
+    <h1>En attendant une réponse des modos, jouons !</h1>
+    <div id="game-container">
+        <script>
+            const numRows = 10;
+            const numCols = 10;
+            let score = 0;
+            let bestScore = localStorage.getItem("bestScore") || 0;
 
-<div id="game-container">
-  <h1>En attendant une réponse des modos, jouons !</h1>
+            const gameContainer = document.getElementById("game-container");
 
-  <p>Points: <span id="points">0</span></p>
+            const updateScore = () => {
+                if (score > bestScore) {
+                    bestScore = score;
+                    localStorage.setItem("bestScore", bestScore);
+                }
+                gameContainer.innerHTML = `<p>Score: ${score}</p><p>Meilleur score: ${bestScore}</p>`;
+            };
 
-  <button id="btnClick">Clique pour gagner des points</button>
-</div>
+            const handleClick = (event) => {
+                const cell = event.target;
+                if (!cell.classList.contains("clicked")) {
+                    cell.classList.add("clicked");
+                    cell.textContent = "POP";
+                    score++;
+                    updateScore();
+                    if (score === numRows * numCols) {
+                        clearInterval(timerInterval);
+                        alert("Félicitations ! Tu as terminé le jeu !");
+                    }
+                }
+            };
 
-<script>
-  var btnClick = document.getElementById('btnClick');
-  var pointsDisplay = document.getElementById('points');
-  var points = 0;
+            for (let i = 0; i < numRows; i++) {
+                for (let j = 0; j < numCols; j++) {
+                    const cell = document.createElement("div");
+                    cell.classList.add("cell");
+                    cell.addEventListener("click", handleClick);
+                    gameContainer.appendChild(cell);
+                }
+                gameContainer.appendChild(document.createElement("br"));
+            }
 
-  btnClick.addEventListener('click', function() {
-    points++;
-    pointsDisplay.textContent = points;
-  });
-</script>
-
-<be><center(et n'oublie pas de nous communiquer ton score 😀)<</a>
-  
+            const startTime = Date.now();
+            const timerInterval = setInterval(() => {
+                const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+                gameContainer.innerHTML = `<p>Score: ${score}</p><p>Meilleur score: ${bestScore}</p><p>Temps écoulé: ${elapsedTime} s</p>`;
+            }, 1000);
+        </script>
+    </div>
+    <p>(et n'oublie pas de nous communiquer ton score 😀)</p>
 </body>
 </html>
