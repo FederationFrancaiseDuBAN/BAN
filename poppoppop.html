@@ -67,12 +67,13 @@
 <div id="title">JOUONS 🤣</div>
 <div id="game"></div>
 <div id="score">Score: <span>0</span></div>
-<div id="timer">Time: <span>0</span> seconds</div>
+<div id="timer">Time: <span>0.00</span> seconds</div>
 
 <div id="modal">
   <div class="modal-content">
     <p>Game Over</p>
     <p>Your Score: <span id="finalScore">0</span></p>
+    <p>Time: <span id="finalTime">0.00</span> seconds</p>
     <button id="restartButton">Restart</button>
   </div>
 </div>
@@ -81,8 +82,9 @@
   const gameContainer = document.getElementById("game");
   const scoreDisplay = document.querySelector("#score span");
   const timerDisplay = document.querySelector("#timer span");
-  const modal = document.getElementById("modal");
   const finalScoreDisplay = document.getElementById("finalScore");
+  const finalTimeDisplay = document.getElementById("finalTime");
+  const modal = document.getElementById("modal");
   const restartButton = document.getElementById("restartButton");
   
   let score = 0;
@@ -113,18 +115,18 @@
 
   function startTimer() {
     startTime = Date.now();
-    timerInterval = setInterval(updateTimer, 1000);
+    timerInterval = setInterval(updateTimer, 10); // Update every centisecond
   }
 
   function updateTimer() {
-    const currentTime = Math.floor((Date.now() - startTime) / 1000);
-    timerDisplay.textContent = currentTime;
+    const currentTime = (Date.now() - startTime) / 1000;
+    timerDisplay.textContent = currentTime.toFixed(2);
   }
 
   function initializeGame() {
     score = 0;
     scoreDisplay.textContent = score;
-    timerDisplay.textContent = "0";
+    timerDisplay.textContent = "0.00";
     gameContainer.innerHTML = "";
     for (let i = 0; i < 100; i++) {
       gameContainer.appendChild(createCell(i));
@@ -134,6 +136,7 @@
 
   function showModal() {
     finalScoreDisplay.textContent = score;
+    finalTimeDisplay.textContent = parseFloat(timerDisplay.textContent).toFixed(2);
     modal.style.display = "flex";
   }
 
