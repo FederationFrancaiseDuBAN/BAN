@@ -67,7 +67,7 @@
 <div id="title">JOUONS 🤣</div>
 <div id="game"></div>
 <div id="score">Score: <span>0</span></div>
-<div id="timer">Time: <span>0.00</span> seconds</div>
+<div id="timer">Time: <span>0</span> seconds</div>
 
 <div id="modal">
   <div class="modal-content">
@@ -82,9 +82,8 @@
   const gameContainer = document.getElementById("game");
   const scoreDisplay = document.querySelector("#score span");
   const timerDisplay = document.querySelector("#timer span");
-  const finalScoreDisplay = document.getElementById("finalScore");
-  const finalTimeDisplay = document.getElementById("finalTime");
   const modal = document.getElementById("modal");
+  const finalScoreDisplay = document.getElementById("finalScore");
   const restartButton = document.getElementById("restartButton");
   
   let score = 0;
@@ -115,7 +114,7 @@
 
   function startTimer() {
     startTime = Date.now();
-    timerInterval = setInterval(updateTimer, 10); // Update every centisecond
+    timerInterval = setInterval(updateTimer, 10); // Update every centisecond (0.01 seconds)
   }
 
   function updateTimer() {
@@ -136,7 +135,9 @@
 
   function showModal() {
     finalScoreDisplay.textContent = score;
-    finalTimeDisplay.textContent = parseFloat(timerDisplay.textContent).toFixed(2);
+    const finalTimeDisplay = document.getElementById("finalTime");
+    const finalTime = (Date.now() - startTime) / 1000;
+    finalTimeDisplay.textContent = finalTime.toFixed(2);
     modal.style.display = "flex";
   }
 
