@@ -6,15 +6,18 @@
 <style>
   body {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
     margin: 0;
+    font-family: Arial, sans-serif;
   }
   #game {
     display: grid;
     grid-template-columns: repeat(10, 40px);
     grid-gap: 2px;
+    margin-bottom: 20px;
   }
   .cell {
     width: 40px;
@@ -25,23 +28,35 @@
     align-items: center;
     font-size: 12px;
     cursor: pointer;
+    user-select: none;
+  }
+  .popped {
+    background-color: black;
+    color: white;
+  }
+  #score, #timer {
+    font-size: 18px;
+    margin: 5px;
+  }
+  #title {
+    font-size: 24px;
+    color: red;
+    margin-bottom: 10px;
   }
 </style>
-<title>Pop the Bubbles!</title>
+<title>JOUONS 🤣</title>
 </head>
 <body>
+<div id="title">JOUONS 🤣</div>
 <div id="game"></div>
-<p>Score: <span id="score">0</span></p>
-<p>Best Score: <span id="bestScore">0</span></p>
-<p>Time: <span id="timer">0</span> seconds</p>
+<div id="score">Score: <span>0</span></div>
+<div id="timer">Time: <span>0</span> seconds</div>
 <script>
   const gameContainer = document.getElementById("game");
-  const scoreDisplay = document.getElementById("score");
-  const bestScoreDisplay = document.getElementById("bestScore");
-  const timerDisplay = document.getElementById("timer");
+  const scoreDisplay = document.querySelector("#score span");
+  const timerDisplay = document.querySelector("#timer span");
   
   let score = 0;
-  let bestScore = localStorage.getItem("bestScore") || 0;
   let startTime;
   let timerInterval;
 
@@ -57,15 +72,11 @@
   function popBubble(cell) {
     if (cell.textContent === "Bulle") {
       cell.textContent = "POP";
+      cell.classList.add("popped");
       score++;
       scoreDisplay.textContent = score;
       if (score === 100) {
         clearInterval(timerInterval);
-        if (score > bestScore) {
-          bestScore = score;
-          localStorage.setItem("bestScore", bestScore);
-          bestScoreDisplay.textContent = bestScore;
-        }
       }
     }
   }
@@ -84,7 +95,6 @@
     score = 0;
     scoreDisplay.textContent = score;
     timerDisplay.textContent = "0";
-    bestScoreDisplay.textContent = bestScore;
     gameContainer.innerHTML = "";
     for (let i = 0; i < 100; i++) {
       gameContainer.appendChild(createCell(i));
